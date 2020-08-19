@@ -1,0 +1,8 @@
+{
+  "name": "whatsAppStatus",
+  "integrations": {
+    "capacitor": {},
+    "cordova": {}
+  },
+  "type": "angular"
+}
