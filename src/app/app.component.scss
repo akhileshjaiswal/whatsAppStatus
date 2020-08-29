@@ -1,0 +1,19 @@
+.main {
+    background: #08b148;
+    height: 10em;
+    display: flex;
+    font-size: 25px;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    flex-direction: column;
+}
+
+.main2 {
+    display: flex;
+    padding-left: 1em;
+    font-size: 15px;
+    flex-direction: row;
+    line-height: 27px;
+    color: #3880ff;
+}

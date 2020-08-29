@@ -1,13 +1,16 @@
 <ion-header [translucent]="true">
-    <ion-toolbar color='primary'>
-        <ion-title>
-            WhatsApp Status Sharer
-            <ion-icon style="float: right;font-size: 35px;" (click)='refresh()' name="refresh-circle"></ion-icon>
+    <ion-toolbar color='pri' style="background:#08b148;color: white;">
+        <ion-buttons slot="start">
+            <ion-menu-button style="color:white"></ion-menu-button>
+        </ion-buttons>
+        <ion-title style="float: left;">
+            Status Sharer
         </ion-title>
+        <ion-icon (click)='refresh()' name='refresh-circle' style="float: right;margin-right: 1em;font-size: 30px;"></ion-icon>
     </ion-toolbar>
 </ion-header>
 <ion-progress-bar [ngClass]='hide' type="indeterminate"></ion-progress-bar>
-<ion-segment value='images'>
+<ion-segment color='primary' value='images'>
     <ion-segment-button (click)="segment('images')" value="images">
         <ion-label>Images</ion-label>
     </ion-segment-button>
@@ -17,23 +20,22 @@
 </ion-segment>
 <ion-content *ngIf='image_sec'>
     <ion-grid>
-        <ion-row>
+        <ion-row style="border-bottom: 1px solid #ddd;">
             <ion-col size='12'>
-                <ion-text color='primary' style="font-size: 22px;font-weight: 400;margin-left: 1em;">{{view}}</ion-text>
-                <ion-icon (click)="ongrid_view()" color='primary' *ngIf='!grid_view' style="font-size: 35px;float: right;margin-left: 0.5em;margin-right: 0.5em;line-height: 25px;" name="grid-outline"></ion-icon>
-                <ion-icon *ngIf='grid_view' color='primary' style="font-size: 35px;float: right;margin-left: 0.5em;margin-right: 0.5em;line-height: 25px;" name="grid"></ion-icon>
-                <ion-icon (click)="onlist_view()" color='primary' style="font-size: 40px;float: right;" name="list-outline"></ion-icon>
+                <ion-text color='primary' style="font-size: 20px;font-weight: 400;margin-left: 1em;">{{view}}</ion-text>
+                <ion-icon (click)='onviewChange("grid")' *ngIf='list_view' color='primary' style="float: right;font-size: 20px;" name="grid"></ion-icon>
+                <ion-icon (click)='onviewChange("list")' *ngIf='grid_view' color='primary' style="float: right;font-size: 20px;" name='list'></ion-icon>
             </ion-col>
         </ion-row>
         <ion-row *ngIf='grid_view'>
             <ion-col *ngFor='let x of dir' class="card_div" size='6'>
                 <ion-row style="height: 100%;padding: 0;">
                     <ion-col size='12' style="height: 85%;">
-                        <img src="{{x.url}}" height="100%" width="100%" alt="" (click)='onclick(x)'>
+                        <img src="{{x.url}}" height="100%" width="100%" style="border-radius: 5px;" alt="" (click)='onclick(x)'>
                     </ion-col>
                     <ion-col size='12' class='card_inner'>
-                        <ion-icon color='primary' style="float: right;font-size: 30px;margin-left: 0.5em;" name="chevron-down-outline" (click)='action_sheet(x)'></ion-icon>
-                        <ion-icon color='primary' style="float: right;font-size: 30px;" name="share-social" (click)='onshare(x)'></ion-icon>
+                        <ion-icon color='primary' style="float: right;font-size: 20px;margin-left: 0.5em;" name="chevron-down-outline" (click)='action_sheet(x)'></ion-icon>
+                        <ion-icon color='primary' style="float: right;font-size: 20px;" name="share-social" (click)='onshare(x)'></ion-icon>
                     </ion-col>
                 </ion-row>
             </ion-col>
@@ -42,11 +44,11 @@
             <ion-col size='12' *ngFor='let x of dir'>
                 <ion-item>
                     <ion-thumbnail slot="start" (click)='onclick(x)'>
-                        <img src="{{x.url}}">
+                        <img src="{{x.url}}" style="border-radius: 5px;">
                     </ion-thumbnail>
                     <ion-label>{{x.name}}</ion-label>
-                    <ion-icon color='primary' style="float: right;font-size: 30px;" name="share-social" (click)='onshare(x)'></ion-icon>
-                    <ion-icon color='primary' style="float: right;font-size: 30px;margin-left: 0.5em;" name="chevron-down-outline" (click)='action_sheet(x)'></ion-icon>
+                    <ion-icon color='primary' style="float: right;font-size: 22px;" name="share-social" (click)='onshare(x)'></ion-icon>
+                    <ion-icon color='primary' style="float: right;font-size: 22px;margin-left: 0.5em;" name="chevron-down-outline" (click)='action_sheet(x)'></ion-icon>
                 </ion-item>
             </ion-col>
         </ion-row>
@@ -55,34 +57,18 @@
 <ion-content *ngIf='video_sec'>
     <ion-grid>
         <ion-row>
-            <ion-col size='12'>
-                <ion-text color='primary' style="font-size: 22px;font-weight: 400;margin-left: 1em;">{{view}}</ion-text>
-                <ion-icon color='primary' (click)="ongrid_view()" *ngIf='!grid_view' style="font-size: 35px;float: right;margin-left: 0.5em;margin-right: 0.5em;line-height: 25px;" name="grid-outline"></ion-icon>
-                <ion-icon color='primary' *ngIf='grid_view' style="font-size: 35px;float: right;margin-left: 0.5em;margin-right: 0.5em;line-height: 25px;" name="grid"></ion-icon>
-                <ion-icon color='primary' (click)="onlist_view()" style="font-size: 40px;float: right;" name="list-outline"></ion-icon>
-            </ion-col>
-        </ion-row>
-        <ion-row *ngIf='grid_view'>
-            <ion-col *ngFor='let x of dir_vid' class="card_div" size='6'>
-                <ion-row style="height: 100%;padding: 0;">
-                    <ion-col size='12' style="height: 85%;">
-                        <img src="{{x.url}}" height="100%" width="100%" alt="" (click)='onclick(x)'>
+            <ion-col size='12' *ngFor='let x of dir_vid' style="margin-bottom: 1em; border: 1px solid #ddd;">
+                <ion-row>
+                    <ion-col size='12'>
+                        <video width='390' height="200" controls>
+                            <source src='{{x.url}}'>
+                        </video>
                     </ion-col>
                     <ion-col size='12'>
-                        <ion-icon style="float: right;" name="chevron-down-outline"></ion-icon>
+                        <ion-icon color='primary' style="float: right;font-size: 22px;margin-left: 0.5em;" (click)='action_sheet3(x)' name='chevron-down-outline'></ion-icon>
+                        <ion-icon color='primary' style="float: right;font-size: 22px;" name='share-social' (click)='onshare(x)'></ion-icon>
                     </ion-col>
                 </ion-row>
-            </ion-col>
-        </ion-row>
-        <ion-row *ngIf='list_view'>
-            <ion-col size='12' *ngFor='let x of dir_vid'>
-                <ion-item>
-                    <ion-thumbnail slot="start" (click)='onclick(x)'>
-                        <img src="{{x.url}}">
-                    </ion-thumbnail>
-                    <ion-label>{{x.name}}</ion-label>
-                    <ion-icon style="float: right;" name="chevron-down-outline"></ion-icon>
-                </ion-item>
             </ion-col>
         </ion-row>
     </ion-grid>

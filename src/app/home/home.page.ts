@@ -1,10 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 
-import { File } from '@ionic-native/file/ngx'
-import { FileOpener } from '@ionic-native/file-opener/ngx'
-import { PhotoViewer } from '@ionic-native/photo-viewer/ngx'
-import { WebView } from '@ionic-native/ionic-webview/ngx'
-import { SocialSharing } from '@ionic-native/social-sharing/ngx'
+import { File } from '@ionic-native/file/ngx';
+import { FileOpener } from '@ionic-native/file-opener/ngx';
+import { PhotoViewer } from '@ionic-native/photo-viewer/ngx';
+import { WebView } from '@ionic-native/ionic-webview/ngx';
+import { SocialSharing } from '@ionic-native/social-sharing/ngx';
+import { VideoPlayer } from '@ionic-native/video-player/ngx';
+import { Downloader, DownloadRequest, NotificationVisibility } from '@ionic-native/downloader/ngx'
 
 import { Platform, ActionSheetController } from '@ionic/angular'
 
@@ -22,6 +24,8 @@ export class HomePage implements OnInit {
     private photoview: PhotoViewer,
     private webview: WebView,
     private socialsharing: SocialSharing,
+    private videoplayer: VideoPlayer,
+    private downloader: Downloader,
     private actionSheetController: ActionSheetController) { }
 
   dir = [];
@@ -31,8 +35,8 @@ export class HomePage implements OnInit {
   list_view = true;
   image_sec = true;
   video_sec = false;
-  view='List View'
-  hide=''
+  view = 'List View';
+  hide = '';
   ngOnInit() {
     this.plt.ready().then(() => {
       this.file.listDir(this.file.externalRootDirectory, 'WhatsApp/Media/.Statuses').then(res => {
@@ -42,14 +46,13 @@ export class HomePage implements OnInit {
           if (arr[1] == 'jpg') {
             const url = this.webview.convertFileSrc(res[i].nativeURL);
             this.dir.push({ name: res[i].name, url: url, nativeURL: res[i].nativeURL });
-          } else {
+          } else if (type != '.nomedia') {
             const url = this.webview.convertFileSrc(res[i].nativeURL);
             this.dir_vid.push({ name: res[i].name, url: url, nativeURL: res[i].nativeURL });
           }
         }
-        this.hide='hide';
+        this.hide = 'hide';
       });
-      
     });
   }
 
@@ -57,19 +60,25 @@ export class HomePage implements OnInit {
     this.photoview.show(file.nativeURL);
   }
 
-  fileopen(file:any){
-    this.fileopener.open(file.nativeURL,'image/jpeg');
+
+  fileopen(file: any) {
+    this.fileopener.open(file.nativeURL, 'image/jpeg');
+  }
+  openVideo(file) {
+    this.fileopener.open(file.nativeURL, 'video/mp4');
   }
 
-  ongrid_view() {
-    this.list_view = false;
-    this.grid_view = true;
-    this.view='Grid View';
-  }
-  onlist_view() {
-    this.grid_view = false;
-    this.list_view = true;
-    this.view='List View';
+
+  onviewChange(data) {
+    if (data == 'grid') {
+      this.list_view = false;
+      this.grid_view = true;
+      this.view = 'Grid View';
+    } else {
+      this.list_view = true;
+      this.grid_view = false;
+      this.view = 'List View';
+    }
   }
 
   segment(data) {
@@ -81,19 +90,16 @@ export class HomePage implements OnInit {
       this.video_sec = true;
     }
   }
-  refresh(){
+  refresh() {
     window.location.reload();
   }
 
-  onshare(file:any){
-    var options={
-      message:'',
-      file:file.url,
-    }
-    this.socialsharing.share('',null,file.nativeURL,null);
+  onshare(file: any) {
+    this.socialsharing.share('', null, file.nativeURL, null);
   }
 
-  async action_sheet(data) {
+
+  async action_sheet(data, type) {
     const actionSheet = await this.actionSheetController.create({
       header: 'Images',
       cssClass: 'my-custom-class',
@@ -116,6 +122,35 @@ export class HomePage implements OnInit {
           icon: 'image',
           handler: () => {
             this.onclick(data);
+          }
+        }, {
+          text: 'Cancel',
+          icon: 'close',
+          role: 'cancel',
+          handler: () => {
+            // console.log('Cancel clicked');
+          }
+        }]
+    });
+    await actionSheet.present();
+  }
+  async action_sheet3(data) {
+    const actionSheet = await this.actionSheetController.create({
+      header: 'Videos',
+      cssClass: 'my-custom-class',
+      buttons: [
+        {
+          text: 'Open',
+          icon: 'videocam',
+          handler: () => {
+            this.openVideo(data);
+          }
+        },
+        {
+          text: 'Share',
+          icon: 'share-social',
+          handler: () => {
+            this.onshare(data);
           }
         }, {
           text: 'Cancel',

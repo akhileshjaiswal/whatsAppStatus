@@ -14,6 +14,9 @@ import { FileOpener } from '@ionic-native/file-opener/ngx'
 import { PhotoViewer } from '@ionic-native/photo-viewer/ngx'
 import { WebView } from '@ionic-native/ionic-webview/ngx'
 import { SocialSharing } from '@ionic-native/social-sharing/ngx'
+import { VideoPlayer } from '@ionic-native/video-player/ngx'
+import { Downloader } from '@ionic-native/downloader/ngx'
+
 
 @NgModule({
   declarations: [AppComponent],
@@ -27,8 +30,10 @@ import { SocialSharing } from '@ionic-native/social-sharing/ngx'
     FileOpener,
     PhotoViewer,
     WebView,
-    SocialSharing
+    VideoPlayer,
+    Downloader,
+    SocialSharing,
   ],
   bootstrap: [AppComponent]
 })
-export class AppModule {}
+export class AppModule { }
