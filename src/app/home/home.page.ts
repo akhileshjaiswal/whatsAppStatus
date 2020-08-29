@@ -99,7 +99,7 @@ export class HomePage implements OnInit {
   }
 
 
-  async action_sheet(data, type) {
+  async action_sheet(data) {
     const actionSheet = await this.actionSheetController.create({
       header: 'Images',
       cssClass: 'my-custom-class',

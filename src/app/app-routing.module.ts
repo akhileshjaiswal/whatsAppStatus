@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
-import { SlideComponent } from './slide/slide.component';
+import { SlidePage } from './slide/slide.page';
 
 const routes: Routes = [
   {
@@ -8,13 +8,12 @@ const routes: Routes = [
     loadChildren: () => import('./home/home.module').then( m => m.HomePageModule)
   },
   {
+    path:'slide',component:SlidePage
+  },
+  {
     path: '',
     redirectTo: 'home',
     pathMatch: 'full'
-  },
-  {
-    path:'slide',
-    component:SlideComponent
   }
 ];
 
